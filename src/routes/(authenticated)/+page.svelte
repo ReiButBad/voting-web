@@ -14,6 +14,8 @@
                 <p>Dibuka: {new Date(poll.created).toLocaleString()}</p>
                 <p>Ditutup: {new Date(poll.expires_at).toLocaleString()}</p>
             </button>
+        {:else}
+            <div class="text-neutral">No polls...</div>
         {/each}
     {/if}
 </form>
