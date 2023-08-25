@@ -1,29 +1,31 @@
+<script lang="ts">
+	import { goto } from "$app/navigation";
+	import { pb } from "$lib/client/user";
+	let loggingOut = false
+
+	function handleLogout() {
+		try {
+			loggingOut = true
+			pb.authStore.clear()
+			goto("/login")
+		} finally {
+			loggingOut = false
+		}
+	}
+
+	function getProfile() {
+		return (pb.authStore.model?.name as string).split(" ").map(v => v.slice(0,1)).join("")
+	}
+</script>
+
 <header>
-	<div class="dui-navbar bg-base-100">
+	<div class="dui-navbar bg-base-300">
 		<div class="flex-1">
-			<a href="/" class="dui-btn dui-btn-ghost normal-case text-xl">Voting</a>
+			<a href="/" class="px-5 font-semibold normal-case text-xl">Voting XH</a>
 		</div>
-		<div class="flex-none gap-2">
-			<div class="dui-form-control">
-				<input type="text" placeholder="Search" class="input input-bordered w-24 md:w-auto" />
-			</div>
-			<div class="dui-dropdown dui-dropdown-end">
-				<label tabindex="0" class="btn btn-ghost btn-circle avatar">
-                </label>
-				<ul
-					tabindex="0"
-					class="mt-3 z-[1] p-2 shadow dui-menu dui-menu-sm dui-dropdown-content bg-base-100 rounded-box w-52"
-				>
-					<li>
-						<a class="justify-between">
-							Profile
-							<span class="dui-badge">New</span>
-						</a>
-					</li>
-					<li><a>Settings</a></li>
-					<li><a>Logout</a></li>
-				</ul>
-			</div>
+		<div class="dui-navbar-end px-5 invisible sm:visible">
+			<h2>{pb.authStore.model?.name}</h2>
+			<div class="dui-btn-circle bg-neutral text-neutral-content flex items-center justify-center mx-3">{getProfile()}</div>
 		</div>
 	</div>
 </header>
@@ -31,5 +33,5 @@
 	<slot />
 </div>
 <footer class="dui-footer p-10 bg-base-300 text-base-content flex-grow">
-	<button class="dui-footer-title dui-btn dui-btn-ghost flex items-center">Log Out</button>
+	<button class="dui-footer-title dui-btn dui-btn-ghost flex items-center" on:click={handleLogout}>Log Out</button>
 </footer>

@@ -61,8 +61,11 @@
 </script>
 
 <form class="w-full">
+    <div class="h-20 flex item-center justify-center items-center font-semibold text-3xl">
+        {data.poll?.text}
+    </div>
     {#if data.selections !== undefined}
-        <div class="flex">
+        <div class="flex items-center flex-col md:flex-row md:justify-center">
             {#each data.selections as selection}
                 <div class="m-1 flex flex-col w-max bg-neutral-800 p-4 rounded-lg">
                     <div class="w-full">
