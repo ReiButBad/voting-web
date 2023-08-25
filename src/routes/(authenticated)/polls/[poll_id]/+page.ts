@@ -3,8 +3,9 @@ import type { PollItem } from "$lib/interfaces";
 import { pb } from "$lib/client/user";
 import { browser } from "$app/environment";
 
-export const load: PageLoad = async ({ params }) => {
+export const load: PageLoad = async ({ params, parent }) => {
     if(browser) {
+        await parent()
         let poll = await pb.collection("polls").getOne(params.poll_id)
         let selections = await pb.collection("poll_items").getFullList({
             filter: `(poll_id='${params.poll_id}')`
