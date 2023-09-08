@@ -3,23 +3,25 @@
     import { LocalAuthStore } from "pocketbase";
     import { env } from "$env/dynamic/public"
     import { goto } from "$app/navigation";
+    import { page } from "$app/stores";
 
     const pb = new PocketBase(env.PUBLIC_POCKETBASE_HOST, new LocalAuthStore())
-    console.log(env.PUBLIC_POCKETBASE_HOST)
     let isAuth = false
 
     const submit = async () => {
         isAuth = true
         pb.authStore.clear()
         let auth = await pb.collection("users").authWithOAuth2({ provider: "google" })
-        // console.log(auth)
         if(auth.record.name === "") {
             await pb.collection("users").update(auth.record.id, {
                 name: auth.meta?.rawUser.family_name
             })
         }
         pb.authStore.save(auth.token, auth.record)
-        goto("/")
+        let redirect = `${new URLSearchParams(window.location.search).get("redirect") || "/"}`
+        goto(redirect, {
+            invalidateAll: true
+        })
         isAuth = false
     }
 </script>

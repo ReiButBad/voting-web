@@ -11,7 +11,9 @@ export const load: LayoutLoad = async () => {
             pb.authStore.clear();
         }
         if (!pb.authStore.isValid) {
-            await goto('/login');
+            await goto('/login', {
+                invalidateAll: true
+            });
         }
     }
 }

@@ -78,9 +78,9 @@
                         {/each}
                     </div>
                     <div class="flex items-center space-x-2 w-full">
-                        <div class="text-neutral-content text-md font-bold flex items-center justify-center w-14">{percentages[selection.id] || 0}%</div>
+                        <div class="text-neutral-content text-md font-bold flex items-center justify-center w-14">{(percentages[selection.id] || 0).toFixed(1)}%</div>
                         <div class="h-full flex items-center justify-center">
-                            <progress value={percentages[selection.id] || 0} max=100 class="dui-progress dui-progress-accent bg-neutral-500 w-52"></progress>
+                            <progress value={percentages[selection.id] || 0} max=100 class="dui-progress dui-progress-secondary bg-neutral-500 w-52"></progress>
                         </div>
                         <button class="dui-btn disabled:text-neutral-content dui-btn-primary" on:click|preventDefault={() => setVote(selection.id)} disabled={isDisabled(selection) || processing}>Vote</button>
                     </div>

@@ -7,7 +7,9 @@
 		try {
 			loggingOut = true
 			pb.authStore.clear()
-			goto("/login")
+			goto("/login", {
+				invalidateAll: true
+			})
 		} finally {
 			loggingOut = false
 		}
@@ -18,10 +20,20 @@
 	}
 </script>
 
+<svelte:head>
+	
+	<script>
+		if(localStorage.getItem("pocketbase_auth") == null) {
+			let params = new URLSearchParams({ redirect: window.location.href })
+			window.location.href = "/login?" + params.toString()
+		}
+	</script>
+</svelte:head>
+
 <header>
-	<div class="dui-navbar bg-base-300">
+	<div class="dui-navbar bg-primary text-primary-content">
 		<div class="flex-1">
-			<a href="/" class="px-5 font-semibold normal-case text-xl">Voting XH</a>
+			<a href="/" class="px-5 font-semibold normal-case text-xl">Kelas XH</a>
 		</div>
 		<div class="dui-navbar-end px-5 invisible sm:visible">
 			<h2>{pb.authStore.model?.name}</h2>
@@ -30,8 +42,12 @@
 	</div>
 </header>
 <div id="content" class="flex w-full h-fullp p-5">
-	<slot />
+	{#if pb.authStore.isValid}
+		<slot />
+	{:else}
+		<div class="dui-loading-spinner"></div>
+	{/if}
 </div>
 <footer class="dui-footer p-10 bg-base-300 text-base-content flex-grow">
-	<button class="dui-footer-title dui-btn dui-btn-ghost flex items-center" on:click={handleLogout}>Log Out</button>
+	<button disabled={loggingOut} class="dui-footer-title dui-btn dui-btn-ghost flex items-center" on:click={handleLogout}>Log Out</button>
 </footer>
